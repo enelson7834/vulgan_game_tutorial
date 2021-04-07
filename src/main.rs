@@ -12,14 +12,26 @@ fn main() {
     let app_name = CString::new(WINDOW_TITLE).unwrap();
     let engine_name = CString::new("Vulkan Engine").unwrap();
     let app_info = vk::ApplicationInfo {
-        s_type : vk::StructureType::APPLICATION_INFO,
-        p_next : ptr::null(),
-        p_application_name : app_name.as_ptr(),
-        application_version : APPLICATION_VERSION,
-        p_engine_name : engine_name.as_ptr(),
-        engine_version : ENGINE_VERSION,
-        api_version : API_VERSION,
+        s_type: vk::StructureType::APPLICATION_INFO,
+        p_next: ptr::null(),
+        p_application_name: app_name.as_ptr(),
+        application_version: APPLICATION_VERSION,
+        p_engine_name: engine_name.as_ptr(),
+        engine_version: ENGINE_VERSION,
+        api_version: API_VERSION,
     };
+
+    let extension_names = utility::platforms::required_extension_names();
+    let create_info = vk::InstanceCreateInfo {
+        s_type: vk::StructureType::INSANCE_CREATE_INFO,
+        p_next: ptr::null(),
+        flags: ck::InstanceCreateFlags::empty(),
+        p_application_info: &app_info,
+        pp_enabled_layer_names: ptr::null(),
+        enabled_layer_count: 0,
+        pp_enabled_extension_names: extension_names.as_ptr(),
+        enabled_extension_count: extension_names.len() as u32,
+    }
 
     unsafe {
         let entry = Entry::new().expect("Failed to create entry.");
